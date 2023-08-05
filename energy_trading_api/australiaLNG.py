@@ -16,9 +16,7 @@ def determineLatestACCCreport(url_ACCC="https://www.accc.gov.au/regulated-infras
 
     #search for the url using regex, then take the first record- this results in the latest ACCC Netback file url.
     newlist = list(filter(url_regex.match, listx))
-    url = newlist[0]
-
-    return url
+    return newlist[0]
 
 def acccNetbackPrice(targetSheet="Price series chart data"
                      ,start_row=4

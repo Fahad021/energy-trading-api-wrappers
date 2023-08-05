@@ -19,9 +19,7 @@ def _basic_rec_call(recDay):
     df = pd.io.json.json_normalize(result,["result"],record_prefix=None)
     df.reset_index(level=0, inplace=True)
     rangeDF = df["certificateRanges"].apply(pd.Series)
-    mergedDF = pd.concat([df.drop(['certificateRanges'], axis=1), rangeDF], axis=1)
-
-    return mergedDF
+    return pd.concat([df.drop(['certificateRanges'], axis=1), rangeDF], axis=1)
 
 
 def recDay(recDay):

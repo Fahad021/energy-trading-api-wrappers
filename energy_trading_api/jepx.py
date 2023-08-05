@@ -24,7 +24,7 @@ def __call_api(endpoint, column_names=None,encoding="utf-8"):
     url = f"http://www.jepx.org/{endpoint}"
     s = StringIO(requests.get(url).content.decode(encoding))
     try:
-        if column_names==None:
+        if column_names is None:
             return pd.read_csv(s, header=None)
         else:
             return pd.read_csv(s, header=None, names=column_names)
@@ -42,8 +42,12 @@ def spotHistorical(year="2019"):
     dfRecords = __call_api(endpoint,encoding="Shift JIS")
     dfRecords = dfRecords[1:]
     dfRecords.rename(columns=mappingJEPX, inplace=True)
-    dfRecords = combineTimePeriodDate(dF=dfRecords, targetColumn='DATETIME', periodColumn='PERIOD', targetColumnFmt='%Y/%m/%d')
-    return dfRecords
+    return combineTimePeriodDate(
+        dF=dfRecords,
+        targetColumn='DATETIME',
+        periodColumn='PERIOD',
+        targetColumnFmt='%Y/%m/%d',
+    )
 
 
 

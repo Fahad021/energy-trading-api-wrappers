@@ -10,7 +10,7 @@ class AppURLopener(urllib.request.FancyURLopener):
 
 def __call_api_BOM(code):
     product, station = code.split('.')
-    url = '%s/%s/%s.json' % (__URL, product, code)
+    url = f'{__URL}/{product}/{code}.json'
     opener = AppURLopener()
     file = opener.open(url)
     stationJSON = json.loads(file.read())

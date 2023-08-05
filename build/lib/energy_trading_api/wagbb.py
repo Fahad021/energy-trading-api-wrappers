@@ -16,10 +16,7 @@ def _basic_gasday_call(endpoint, gasDay="current", record_prefix=None, column_po
     df = pd.io.json.json_normalize(
         result, ["rows"], ["reportId", "asAt", "gasDay"], record_prefix=record_prefix
     )
-    if column_pop:
-        # The result comes with the Capacity column structured as a dict, so this next line breaks it up to columns
-        return df.join(pd.DataFrame(df.pop(column_pop).tolist()))
-    return df
+    return df.join(pd.DataFrame(df.pop(column_pop).tolist())) if column_pop else df
 
 
 def actualFlow(gasDay="current", month=None):

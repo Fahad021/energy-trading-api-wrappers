@@ -12,13 +12,12 @@ from .common import commonData
 
 def __call_api(report,key="",series=None):
     api = eia.API(key)
-    if series==None:
+    if series is None:
         series_search = api.data_by_series(series=commonData.dictEiaReports.get(report))
     else:
         series_search = api.data_by_series(series=series)
 
-    result = pd.DataFrame(series_search)
-    return result
+    return pd.DataFrame(series_search)
 
 def eiaAPI(seriesID="",key=""):
     return __call_api(report = None,key =key,series=seriesID)

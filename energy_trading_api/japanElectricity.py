@@ -17,7 +17,7 @@ def __call_api_kyushuElectric(endpoint, column_names=None, skiprows=7,nrows=24):
     url = f"http://www.kyuden.co.jp/td_power_usages/csv/juyo-hourly-{endpoint}.csv"
     s = StringIO(requests.get(url).content.decode("Shift JIS")) #Use Japanese encoding
     try:
-        if column_names==None:
+        if column_names is None:
             return pd.read_csv(s, skiprows=skiprows,nrows=nrows)
         else:
             return pd.read_csv(s, header=None,skiprows=skiprows+1, nrows=nrows,names=column_names)
@@ -42,10 +42,10 @@ def kyushuElectricDemand5MSEnglish(day="20190101"):
 #region Chuden
 def __call_api_chubuElectric(column_names=None, skiprows=0):
     # url = f"http://denki-yoho.chuden.jp/denki_yoho_content_data/areajuyo_current.csv"
-    url=f"https://powergrid.chuden.co.jp/denki_yoho_content_data/areajuyo_current.csv"
+    url = "https://powergrid.chuden.co.jp/denki_yoho_content_data/areajuyo_current.csv"
     s = StringIO(requests.get(url).content.decode("Shift JIS")) #Use Japanese encoding
     try:
-        if column_names==None:
+        if column_names is None:
             return pd.read_csv(s, skiprows=skiprows)
         else:
             return pd.read_csv(s, header=None,skiprows=skiprows+1,names=column_names)
@@ -80,7 +80,7 @@ def __call_api_TEPCO(endpoint, column_names=None, skiprows=7,nrows=24):
     url =f"http://www.tepco.co.jp/forecast/html/images/juyo-{endpoint}.csv"
     s = StringIO(requests.get(url).content.decode("Shift JIS"))  # Use Japanese encoding
     try:
-        if column_names == None:
+        if column_names is None:
             return pd.read_csv(s, skiprows=skiprows, nrows=nrows)
         else:
             return pd.read_csv(s, header=None, skiprows=skiprows + 1, nrows=nrows, names=column_names)
@@ -95,10 +95,19 @@ def tepcoElectricDemandHistoricalEnglish(year="2019"):
     return __call_api_TEPCO(endpoint=f"{year}",skiprows=2,nrows=9000,column_names=["date", "time", "actual demand 10,000 kW"])
 
 def tepcoElectricDemandCurrentJapanese():
-    return __call_api_TEPCO(endpoint=f"j")
+    return __call_api_TEPCO(endpoint="j")
 
 def tepcoElectricDemandCurrentEnglish():
-    return __call_api_TEPCO(endpoint=f"j",column_names=["date", "time", "actual demand 10,000 kW","forecast 10,000 kW","Usage (%)"])
+    return __call_api_TEPCO(
+        endpoint="j",
+        column_names=[
+            "date",
+            "time",
+            "actual demand 10,000 kW",
+            "forecast 10,000 kW",
+            "Usage (%)",
+        ],
+    )
 
 #endregion TEPCO
 
@@ -108,14 +117,11 @@ def __call_api_CHUGOKU(year,column_names=None,nrows=9999):
     url = f"https://www.energia.co.jp/nw/jukyuu/sys/juyo-{year}.csv"
     s = StringIO(requests.get(url).content.decode("Shift JIS"))  # Use Japanese encoding
     try:
-        if column_names == None:
-            df = pd.read_csv(s, skiprows=2, nrows=nrows)
-            df.set_index('DATE', inplace=True)
-            return df
-        else:
+        if column_names is not None:
             return pd.read_csv(s, header=None, skiprows=3, nrows=nrows, names=column_names)
-            df.set_index('DATE', inplace=True)
-            return df
+        df = pd.read_csv(s, skiprows=2, nrows=nrows)
+        df.set_index('DATE', inplace=True)
+        return df
     except Exception as e:
         print(e)
         return None
